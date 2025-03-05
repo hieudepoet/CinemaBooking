@@ -5,8 +5,9 @@
  */
 package controller;
 
+import sampleRegistration.UserDAO;
+import dto.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,47 +17,54 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author OS
+ * @author Hi
  */
-@WebServlet(name = "MainController1", urlPatterns = {"/MainController"})
-public class MainController extends HttpServlet {
-    public final static String homePage="home.jsp";
-    public final static String loginPage="login.jsp";
-    public final static String loginController="LoginController";
-    public final static String checkingController="CheckingRegisterController";
-    public final static String registerPage="RegisterPage.jsp";
+@WebServlet(name = "LoginController", urlPatterns = {"/LoginController"})
+public class LoginController extends HttpServlet {
     
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private static final String LOGIN_PAGE = "login.jsp";
+    
+    public UserDTO getUser(String strUsername) {
+        UserDAO udao = new UserDAO();
+        UserDTO user = udao.readById(strUsername);
+        return user;
+    }
+    
+    public boolean isValidLogin (String strUsername, String strPassword) {
+        UserDTO user = getUser(strUsername);
+//        System.out.println(user);
+//        if (user != null) {
+//            System.out.println("Password from DB: " + user.getPassword());
+//            System.out.println("Password entered: " + strPassword);
+//        }
+        return user != null && user.getPassword().equals(strPassword);
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String button= request.getParameter("btAction");
-        String url=loginPage;
-        try{
-            if(button.equals("Login")){
-                url=loginController;
-            }else if(button.equals("Register")){
-                url=checkingController;
+        String url = LOGIN_PAGE;
+        String strUsername = request.getParameter("txtUsername");
+        String strPassword = request.getParameter("txtPassword");
+        try {      
+            if (isValidLogin(strUsername, strPassword)) {
+                url = "home.jsp";
+                UserDTO user = getUser(strUsername);        
+                request.getSession().setAttribute("user", user);
+            } else {
+                request.setAttribute("message", "Incorrect Username or Password");
+                url = "login.jsp";
             }
-            
-        }catch(Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            log("Error in MainController : " + e.toString());
+        } finally {
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
-        RequestDispatcher rd= request.getRequestDispatcher(url);
-        rd.forward(request, response);
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    
+    
+        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

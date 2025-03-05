@@ -26,21 +26,10 @@ public class DBUtils {
     private static final String DB_Password = "12345";
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
-        Connection conn = null;
+        Connection con = null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String url = "jdbc:sqlserver://localhost:1433;databaseName=" + DB_Name;
-        conn = DriverManager.getConnection(url, DB_Username, DB_Password);
-        return conn;
-    }
-
-    public static void main(String[] args) {
-        try {
-            Connection c = getConnection();
-            System.out.println(c);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBUtils.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        con = DriverManager.getConnection(url, DB_Username, DB_Password);
+        return con;
     }
 }
