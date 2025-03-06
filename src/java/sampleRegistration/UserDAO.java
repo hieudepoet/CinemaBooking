@@ -25,18 +25,17 @@ public class UserDAO implements IDAO<UserDTO, String>{
 
     @Override
     public boolean create(UserDTO entity) {
-        String sql = "INSERT [dbo].[Users] ([full_name], [username], [password],  [email]) "
-                + "VALUES (?, ?, ?, ?)";
-        
+        String sql="Insert into Users (full_name,username,password,email,role,created_at)\n" +"values (?,?,?,?,?,GETDATE())";
         try {
-            Connection conn = DBUtils.getConnection();
-            PreparedStatement ps = conn.prepareCall(sql);
-            ps.setString(1, entity.getFullName());
-            ps.setString(2, entity.getUsername());
-            ps.setString(4, entity.getPassword());
-            ps.setString(3, entity.getEmail());
-            int n = ps.executeUpdate();
-            return n > 0;
+            Connection con = DBUtils.getConnection();
+            PreparedStatement stm=con.prepareStatement(sql);
+            stm.setString(1, entity.getFullName());
+            stm.setString(2, entity.getUsername());
+            stm.setString(3, entity.getPassword());
+            stm.setString(4, entity.getEmail());
+            stm.setString(5, "USER");
+            int row=stm.executeUpdate();
+            return row>0;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

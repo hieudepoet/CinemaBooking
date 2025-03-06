@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import sampleRegistration.RegistrationDAO;
+import sampleRegistration.UserDAO;
 
 /**
  *
@@ -43,10 +45,12 @@ public class RegisterController extends HttpServlet {
         String password=request.getParameter("txtPassRegister");
         String fullName=request.getParameter("txtFullNameRegister");
         String email=request.getParameter("txtGmailRegister");
-        RegistrationDAO dao= new RegistrationDAO();
+        UserDAO udao= new UserDAO();
+        UserDTO udto= new UserDTO(fullName, username, password, email);
+//        RegistrationDAO dao= new RegistrationDAO();
         boolean result=false;
-        result=dao.registerAccount(fullName, username, password, email);
-        out.print(result);
+//        result=dao.registerAccount(fullName, username, password, email);
+        result=udao.create(udto);
         try{
             if(result){
                 url="home.jsp";
