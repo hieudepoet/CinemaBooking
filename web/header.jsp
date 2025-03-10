@@ -363,8 +363,8 @@
                             <button class="cart-box-btn"><span class="flaticon-user"><img src="assets/images/user.png" alt="user"></span></button>
                             <div class="cart-panel">
                                 <ul class="btns-boxed">
-                                    <li><a href="/signup.jsp">Đăng ký</a></li>
-                                    <li><a href="/CinemaBooking/login.jsp">Đăng nhập</a></li>
+                                    <li><a href="RegisterPage.jsp">Đăng ký</a></li>
+                                    <li><a href="login.jsp">Đăng nhập</a></li>
                                 </ul>
                             </div>
                         </div>

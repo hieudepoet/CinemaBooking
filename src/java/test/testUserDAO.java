@@ -5,7 +5,7 @@
  */
 package test;
 
-import dao.UserDAO;
+import sampleRegistration.UserDAO;
 import dto.UserDTO;
 import java.util.List;
 

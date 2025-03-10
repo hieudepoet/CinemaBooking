@@ -5,28 +5,28 @@
  */
 package controller;
 
+import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sampleRegistration.RegistrationDAO;
+import sampleRegistration.UserDAO;
 
 /**
  *
  * @author OS
  */
-@WebServlet(name = "MainController1", urlPatterns = {"/MainController"})
-public class MainController extends HttpServlet {
-    public final static String homePage="home.jsp";
-    public final static String loginPage="login.jsp";
-    public final static String loginController="LoginController";
-    public final static String checkingController="CheckingRegisterController";
-    public final static String registerPage="RegisterPage.jsp";
+@WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
+public class RegisterController extends HttpServlet {
     
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,23 +37,30 @@ public class MainController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, ClassNotFoundException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String button= request.getParameter("btAction");
-        String url=loginPage;
+        String url="InvalidPage.html";
+        String username=request.getParameter("txtUserRegister");
+        String password=request.getParameter("txtPassRegister");
+        String fullName=request.getParameter("txtFullNameRegister");
+        String email=request.getParameter("txtGmailRegister");
+        UserDAO udao= new UserDAO();
+        UserDTO udto= new UserDTO(fullName, username, password, email);
+//        RegistrationDAO dao= new RegistrationDAO();
+        boolean result=false;
+//        result=dao.registerAccount(fullName, username, password, email);
+        result=udao.create(udto);
         try{
-            if(button.equals("Login")){
-                url=loginController;
-            }else if(button.equals("Register")){
-                url=checkingController;
+            if(result){
+                url="home.jsp";
             }
-            
         }catch(Exception e){
-            e.printStackTrace();
+            e.printStackTrace();}
+        finally{
+            RequestDispatcher rd= request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
-        RequestDispatcher rd= request.getRequestDispatcher(url);
-        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,7 +75,13 @@ public class MainController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -82,7 +95,13 @@ public class MainController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

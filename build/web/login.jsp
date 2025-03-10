@@ -79,19 +79,19 @@
             <div class="login-form">
                 <h2 class="form-title">Đăng nhập</h2>
                 <form action="MainController" method="post">
-                    <input type="hidden" name="action" value="login" />
+                    <!--<input type="hidden" name="action" value="login" />-->
 
                     <div class="form-group">
                         <label for="username">Tên đăng nhập</label>
-                        <input type="text" id="userId" name="txtUsername" required />
+                        <input type="text" id="userId" name="txtUsername" required  placeholder="Username"/>
                     </div>
 
                     <div class="form-group">
                         <label for="password">Mật khẩu</label>
-                        <input type="password" id="password" name="txtPassword" required />
+                        <input type="password" id="password" name="txtPassword" required placeholder="Password"/>
                     </div>
-
-                    <button type="submit" class="submit-btn">Đăng nhập</button>
+                    
+                    <button type="submit" class="submit-btn" name="btAction" value="Login">Đăng nhập</button>
                 </form>
                 
                 <%
